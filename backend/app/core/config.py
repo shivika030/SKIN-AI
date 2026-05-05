@@ -1,0 +1,2 @@
+APP_NAME = "Skin AI API"
+APP_VERSION = "1.0.0"
