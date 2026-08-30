@@ -5,6 +5,8 @@ SkinAI is a full-stack web application that uses a deep learning model to classi
 **🔗 Live demo:** [skin-ai-beta-sooty.vercel.app](https://skin-ai-beta-sooty.vercel.app)
 *(Note: the backend runs on a free-tier server that spins down after inactivity — the first request may take 30–60 seconds to respond while it wakes up.)*
 
+📖 [Read the full case study](./CASE_STUDY.md) for the engineering story behind this project.
+
 ---
 
 ## What it does
@@ -30,7 +32,7 @@ Upload a photo of a skin area, and SkinAI returns:
 - Dockerized, deployed on Render
 
 **Model**
-- ResNet18 convolutional neural network
+- ResNet18 convolutional neural network (pretrained backbone, fine-tuned final layer)
 - Trained on a custom dataset across 6 classes: normal, acne, wrinkles, eczema, rosacea, dark spots
 - Input images resized to 224×224 before inference
 
@@ -48,6 +50,29 @@ Upload a photo of a skin area, and SkinAI returns:
 2. The image is sent as `multipart/form-data` to the FastAPI `/predict` endpoint.
 3. The backend preprocesses the image (resize, tensor conversion) and runs it through the trained ResNet18 model.
 4. The prediction, confidence score, and top-3 results are returned as JSON and displayed in the UI.
+
+## Model Performance
+
+Evaluated on a held-out validation set of 944 images across 6 classes.
+
+| Metric | Value |
+|---|---|
+| Overall Accuracy | 72.4% |
+| Avg. Inference Time | 19.3 ms/image (CPU) |
+| Macro F1-score | 0.704 |
+
+**Per-class results:**
+
+| Class | Precision | Recall | F1-score |
+|---|---|---|---|
+| Normal | 0.819 | 0.733 | 0.774 |
+| Acne | 0.640 | 0.654 | 0.647 |
+| Wrinkles | 0.844 | 0.760 | 0.800 |
+| Eczema | 0.769 | 0.772 | 0.770 |
+| Rosacea | 0.752 | 0.731 | 0.742 |
+| Dark Spots | 0.404 | 0.623 | 0.490 |
+
+**Known limitation**: the "Dark Spots" class has the weakest performance — it has the fewest validation samples (61, vs. 240 for "Normal") and is most often confused with the "Normal" class. This points to a clear next step: collecting more balanced training data for this class, or applying class-weighted loss during training.
 
 ## Running Locally
 
@@ -98,10 +123,6 @@ Example response:
 
 **GET** `/health`
 Returns a simple status check.
-
-## Important Note on Model Performance
-
-This project currently does not report formal accuracy/precision/recall metrics from a held-out evaluation set — that's a planned next step. The model was trained on a curated but relatively small dataset, and predictions should be treated as a proof-of-concept rather than a clinically validated tool.
 
 ## Disclaimer
 
