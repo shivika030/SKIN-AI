@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 interface PredictionItem {
   label: string;
@@ -30,6 +31,8 @@ export default function Upload() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(false);
+
+  const [loadingMessage, setLoadingMessage] = useState("Analyzing...");
 
   const [result, setResult] = useState<PredictionResponse | null>(null);
 
@@ -63,6 +66,12 @@ export default function Upload() {
 
     setError(null);
 
+    setLoadingMessage("Analyzing...");
+
+    const slowWarningTimer = setTimeout(() => {
+      setLoadingMessage("Waking up the server — this can take up to a minute on first use...");
+    }, 5000);
+
     try {
 
       const formData = new FormData();
@@ -94,6 +103,8 @@ export default function Upload() {
       setError("Something went wrong while analyzing image.");
 
     } finally {
+
+      clearTimeout(slowWarningTimer);
 
       setLoading(false);
 
@@ -136,9 +147,10 @@ export default function Upload() {
           <button
             onClick={handleUpload}
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 transition rounded-lg py-3 font-semibold disabled:opacity-50"
+            className="bg-blue-600 hover:bg-blue-700 transition rounded-lg py-3 font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {loading ? "Analyzing..." : "Analyze Image"}
+            {loading && <Loader2 className="animate-spin" size={20} />}
+            {loading ? loadingMessage : "Analyze Image"}
           </button>
 
           {error && (
