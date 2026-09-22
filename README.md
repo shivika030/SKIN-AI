@@ -128,6 +128,10 @@ Returns a simple status check.
 
 SkinAI is a student/portfolio project intended to demonstrate a full-stack machine learning application. It is **not** a medical device and should not be used for actual diagnosis. Always consult a qualified dermatologist for skin concerns.
 
-## Author
+## Author & Project History
 
-Built by Shivika Bhawsar as a portfolio/academic project.
+SkinAI originated as a college project developed collaboratively, with the initial frontend work contributed by a classmate.
+
+This repository represents a substantially extended continuation of that project by Shivika Bhawsar, including the machine learning model, backend architecture and extensions, Docker containerization, cloud deployment (Render and Vercel), API design, and full end-to-end application integration.
+
+The original collaborative components remain part of the project's earlier development history. The original work subsequently added by Shivika Bhawsar, including the machine learning implementation, backend extensions, deployment configuration, and associated documentation, is © 2026 Shivika Bhawsar and is subject to the terms of the [LICENSE](./LICENSE) file.
